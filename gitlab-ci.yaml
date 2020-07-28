@@ -1,0 +1,22 @@
+variables:
+  REDIS_VERSION: 6.0.6
+
+containerize:
+  services:
+    - docker:dind
+  image: docker:stable
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - echo "containerize......."
+    - sed -i "s,REDIS_VERSION,${REDIS_VERSION},g" Dockerfile
+    - docker build -t ${CI_REGISTRY_IMAGE}:latest -f Dockerfile .
+    - docker tag ${CI_REGISTRY_IMAGE}:latest ${CI_REGISTRY_IMAGE}:${REDIS_VERSION}
+    - docker push ${CI_REGISTRY_IMAGE}:latest
+    - echo ${CI_REGISTRY_IMAGE}:${REDIS_VERSION}
+    - docker push ${CI_REGISTRY_IMAGE}:${REDIS_VERSION}
+  tags:
+    - aws
+    - m4-large
+  only:
+    - master  
