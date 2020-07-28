@@ -2,9 +2,10 @@ variables:
   REDIS_VERSION: 6.0.6
 
 stages:
-  - containerize
+  - build
 
-containerize:
+docker-build:
+  stage: build
   services:
     - docker:dind
   image: docker:stable
