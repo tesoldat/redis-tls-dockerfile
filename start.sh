@@ -2,7 +2,19 @@
 
 if [ -z "$REDIS_PASS" ]
 then
-    honcho start -f ProcfileWithoutPwd
+    if [ "$REDIS_CONFIG" == "true" ]
+    then
+        honcho start -f ConfigProcfileWithoutPwd
+    else 
+        honcho start -f ProcfileWithoutPwd
+    fi
+    # honcho start -f ProcfileWithoutPwd
 else 
-    honcho start -f ProcfileWithPwd
+    if [ "$REDIS_CONFIG" == "true" ]
+    then
+        honcho start -f ConfigProcfileWithPwd
+    else 
+        honcho start -f ProcfileWithPwd
+    fi
+    # honcho start -f ProcfileWithPwd
 fi
